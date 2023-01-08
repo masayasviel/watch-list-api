@@ -40,11 +40,11 @@ data "aws_s3_object" "golang-zip-hash" {
 }
 
 resource "aws_lambda_function" "function_resource_name" {
-  function_name = "機能名"
+  function_name = "main"
   role = aws_iam_role.lambda_role.arn
   s3_bucket = aws_s3_bucket.lambda_assets.bucket
   s3_key = data.aws_s3_object.golang_zip.key
-  handler = "%ハンドラ名%"
+  handler = "main"
   source_code_hash = data.aws_s3_object.golang-zip-hash.body
   runtime  = "go1.x"
   environment {

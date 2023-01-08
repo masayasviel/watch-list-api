@@ -2,6 +2,8 @@ resource "aws_dynamodb_table" "anime-master-table" {
   name = "animeMaster"
   hash_key = "id"
   range_key = "kana"
+  read_capacity = 1
+  write_capacity = 1
 
   attribute {
     name = "id"
@@ -9,17 +11,7 @@ resource "aws_dynamodb_table" "anime-master-table" {
   }
 
   attribute {
-    name = "title"
-    type = "S"
-  }
-
-  attribute {
     name = "kana"
-    type = "S"
-  }
-
-  attribute {
-    name = "imagePath"
     type = "S"
   }
 }
