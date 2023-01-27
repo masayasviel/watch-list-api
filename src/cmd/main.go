@@ -2,18 +2,15 @@ package main
 
 import (
 	"context"
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-type Response struct {
-	StatusCode int    `json:"statusCode"`
-	Body       string `json:"body"`
-}
-
-func HandleRequest(ctx context.Context) (Response, error) {
-	return Response{
-		StatusCode: 200,
-		Body:       "Hello!",
+func HandleRequest(ctx context.Context) (events.APIGatewayProxyResponse, error) {
+	return events.APIGatewayProxyResponse{
+        Body: "Hello!",
+        StatusCode: 200,
+        IsBase64Encoded: false,
 	}, nil
 }
 
