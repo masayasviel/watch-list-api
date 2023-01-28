@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "dynamodb-data-set"
+version = "0.1.0"
+description = ""
+authors = ["masayasviel <33654883+masayasviel@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "dynamodb_data_set"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+boto3 = "^1.26.59"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
