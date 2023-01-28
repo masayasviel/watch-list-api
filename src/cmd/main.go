@@ -30,9 +30,8 @@ func HandleRequest(ctx context.Context) (events.APIGatewayProxyResponse, error) 
 	}
 	jsonBytes, _ := json.Marshal(out)
 	return events.APIGatewayProxyResponse{
-        Body: "Hello!",
-        StatusCode: 200,
-        IsBase64Encoded: false,
+		Body:            string(jsonBytes),
+		StatusCode:      200,
 	}, nil
 }
 
