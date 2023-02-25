@@ -9,6 +9,12 @@ def main():
         kana="ケイオン",
         imagePath="/path/to/s3"
     ))
+    dynamo_table.put_item(Item=dict(
+        id=2,
+        title="響け！ユーフォニアム",
+        kana="ヒビケユーフォニアム",
+        imagePath="/path/to/s3"
+    ))
 
 if __name__ == "__main__":
     main()
