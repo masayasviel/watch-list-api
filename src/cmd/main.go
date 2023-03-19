@@ -27,8 +27,9 @@ func HandleRequest(ctx context.Context) (events.APIGatewayProxyResponse, error) 
 		}, err
 	}
 	db := dynamodb.New(sess)
-	scanOut, err := db.Scan(&dynamodb.ScanInput{
-		TableName: aws.String("animeMaster"),
+	scanOut, err := db.Query(&dynamodb.QueryInput{
+		TableName:        aws.String("animeMaster"),
+		ScanIndexForward: aws.Bool(false),
 	})
 	if err != nil {
 		return events.APIGatewayProxyResponse{
