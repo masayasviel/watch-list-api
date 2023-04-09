@@ -1,4 +1,13 @@
-resource "null_resource" "lambda_build" {
+locals {
+  codedir_local_path = "${path.module}/../src/cmd/list"
+  binary_local_path = "${path.module}/../src/bin/list"
+  zip_local_path = "${path.module}/../src/archive/list.zip"
+  zip_s3_key = "archive/list.zip"
+  zip_base64sha256_local_path = "${local.zip_local_path}.base64sha256"
+  zip_base64sha256_s3_key = "encoded/list.base64sha256"
+}
+
+resource "null_resource" "lambda_build_for_list" {
   depends_on = [aws_s3_bucket.lambda_assets]
 
   triggers = {
@@ -25,27 +34,27 @@ resource "null_resource" "lambda_build" {
   }
 }
 
-data "aws_s3_object" "golang_zip" {
-  depends_on = [null_resource.lambda_build]
+data "aws_s3_object" "golang_zip_for_list" {
+  depends_on = [null_resource.lambda_build_for_list]
 
   bucket = aws_s3_bucket.lambda_assets.bucket
   key = local.zip_s3_key
 }
 
-data "aws_s3_object" "golang-zip-hash" {
-  depends_on = [null_resource.lambda_build]
+data "aws_s3_object" "golang-zip-hash-for-list" {
+  depends_on = [null_resource.lambda_build_for_list]
 
   bucket = aws_s3_bucket.lambda_assets.bucket
   key = local.zip_base64sha256_s3_key
 }
 
-resource "aws_lambda_function" "function_resource_name" {
+resource "aws_lambda_function" "function_resource_name_for_list" {
   function_name = "main"
   role = aws_iam_role.lambda_role.arn
   s3_bucket = aws_s3_bucket.lambda_assets.bucket
-  s3_key = data.aws_s3_object.golang_zip.key
+  s3_key = data.aws_s3_object.golang_zip_for_list.key
   handler = "main"
-  source_code_hash = data.aws_s3_object.golang-zip-hash.body
+  source_code_hash = data.aws_s3_object.golang-zip-hash-for-list.body
   runtime  = "go1.x"
   environment {
     variables = {
@@ -57,7 +66,7 @@ resource "aws_lambda_function" "function_resource_name" {
 resource "aws_lambda_permission" "apigw" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.function_resource_name.function_name
+  function_name = aws_lambda_function.function_resource_name_for_list.function_name
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${aws_api_gateway_rest_api.rest_api_gateway.execution_arn}/*/*"

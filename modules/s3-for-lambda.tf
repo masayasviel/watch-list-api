@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "lambda_assets" {
-  bucket = "masayasviel-lambda-deploy-bucket"
+  bucket = "masayasviel-watch-list-lambda-deploy-bucket"
 }
 
 resource "aws_s3_bucket_acl" "lambda_assets" {
